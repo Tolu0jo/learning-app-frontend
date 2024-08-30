@@ -2,6 +2,7 @@
 import SubjectCard from "@/components/Admin/SubjectCard";
 import CreateSubjectModal from "@/components/Admin/SubjectModal";
 import Header from "@/components/Header";
+import StudentSubjectCard from "@/components/StudentSubjectCard";
 import React, { useState } from "react";
 
 const dummySubjects = [
@@ -31,18 +32,13 @@ const TeacherDashboard: React.FC = () => {
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-gray-900">
-            Teacher Dashboard
+            Student Dashboard
           </h1>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            Create Subject
-          </button>
+        
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {dummySubjects.map((subject) => (
-            <SubjectCard
+            <StudentSubjectCard
               key={subject.id}
               subjectName={subject.name}
               topicCount={subject.topicCount}
@@ -50,11 +46,6 @@ const TeacherDashboard: React.FC = () => {
             />
           ))}
         </div>
-        <CreateSubjectModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onCreate={handleCreateSubject}
-        />
       </div>
     </div>
     </>
