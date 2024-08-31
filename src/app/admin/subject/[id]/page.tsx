@@ -91,7 +91,7 @@ const SubjectDetailsPage = () => {
               onClick={() => window.history.back()}
               className="text-gray-600 hover:text-gray-900"
             >
-              <IoMdArrowRoundBack size={20} />
+              <IoMdArrowRoundBack size={30} />
             </button>
             <button
               onClick={() => setIsModalOpen(true)}

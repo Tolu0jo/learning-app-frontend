@@ -3,7 +3,7 @@ import axios from "axios";
 
 export interface ICreateCompletion {
   topicId: string;
-  userId: string;
+  subjectId: string;
 }
 
 export const createCompletionApi = async (createCompletionDto: ICreateCompletion) => {

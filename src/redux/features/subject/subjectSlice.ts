@@ -15,7 +15,7 @@ interface Subject {
   completedTopicCount?: number;
 }
 
-interface SubjectWithTopic {
+export interface SubjectWithTopic {
   id: string;
   title: string;
   topics: Topic[];
@@ -27,18 +27,26 @@ export interface TeacherSubject{
     userCount: number;
     topicCount: number;
   }
-interface Topic {
+
+
+export interface StudentSubject{
+  id: string;
+  title: string;
+  completedTopicCount: number;
+  topicCount: number;
+}
+export interface Topic {
   id: string;
   title: string;
   videoUrl: string;
   description: string;
-  subjectId: string;
+  subjectId?: string;
 }
 
 interface SubjectState {
   subject: Subject | null;
   selectedSubject: SubjectWithTopic | null;
-  studentSubjects: Subject[] | null;
+  studentSubjects: StudentSubject[] | null;
   teacherSubjects: TeacherSubject[] | null;
   loading: boolean;
   success: string | null;
@@ -92,7 +100,7 @@ const subjectSlice = createSlice({
     });
     builder.addCase(
       fetchStudentSubjects.fulfilled,
-      (state, action: PayloadAction<Subject[]>) => {
+      (state, action: PayloadAction<StudentSubject[]>) => {
         state.loading = false;
         state.studentSubjects = action.payload;
       }

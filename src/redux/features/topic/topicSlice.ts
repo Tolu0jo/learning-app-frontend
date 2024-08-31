@@ -11,7 +11,7 @@ export interface CompletedTopics {
   title: string;
   id: string;
 }
-
+ 
 interface TopicState {
   topics: any[];
   completedTopics: CompletedTopics[];
