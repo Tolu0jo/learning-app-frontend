@@ -10,7 +10,7 @@ export interface User {
 
 interface AuthState {
   user: User | null;
-  token: string | null;
+  access_token: string | null;
   loading: boolean;
   success: string | null;
   error: string | null;
@@ -18,7 +18,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   user: null,
-  token: null,
+  access_token: null,
   loading: false,
   success: null,
   error: null,
@@ -59,14 +59,14 @@ const authSlice = createSlice({
         login.fulfilled,
         (state, action: PayloadAction<{ user: User; access_token: string }>) => {
           state.user = action.payload.user;
-          state.token = action.payload.access_token;
+          state.access_token = action.payload.access_token;
           state.loading = false;
           state.success = "Login successful!";
         }
       )
       .addCase(login.rejected, (state, action:any) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload.message;
       });
   },
 });

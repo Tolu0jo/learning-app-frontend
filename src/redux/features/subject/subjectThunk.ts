@@ -7,6 +7,7 @@ import {
   ICreateSubject,
   IUpdateSubject,
   updateSubjectApi,
+  getTeacherSubjectsApi
 } from "./subjectApi";
 
 export const createSubject = createAsyncThunk(
@@ -33,6 +34,18 @@ export const fetchStudentSubjects = createAsyncThunk(
   }
 );
 
+export const fetchTeacherSubjects = createAsyncThunk(
+    "subjects/fetchTeacherSubjects",
+    async (_, { rejectWithValue }) => {
+      try {
+        const response = await getTeacherSubjectsApi();
+        return response;
+      } catch (error: any) {
+        return rejectWithValue(error.response?.data || "An error occurred");
+      }
+    }
+  );
+
 export const updateSubject = createAsyncThunk(
   "subjects/updateSubject",
   async (data: IUpdateSubject, { rejectWithValue }) => {
@@ -58,7 +71,7 @@ export const fetchSubjectById = createAsyncThunk(
 );
 
 export const deleteSubject = createAsyncThunk(
-    "subjects/fetchSubjectById",
+    "subjects/deleteSubject",
     async (id: string, { rejectWithValue }) => {
       try {
         const response = await deleteSubjectApi(id);

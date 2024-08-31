@@ -3,7 +3,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const login = createAsyncThunk(
   "auth/login",
-  async (credentials: IRegister, thunkAPI) => {
+  async (credentials: IRegister, { rejectWithValue }) => {
     try {
       const response = await loginApi(credentials);
       return response;
@@ -15,7 +15,7 @@ export const login = createAsyncThunk(
 
 export const register = createAsyncThunk(
   "auth/register",
-  async (credentials: IRegister, thunkAPI) => {
+  async (credentials: IRegister, { rejectWithValue }) => {
     try {
       const response = await registerApi(credentials);
       return response;
@@ -24,6 +24,3 @@ export const register = createAsyncThunk(
     }
   }
 );
-function rejectWithValue(arg0: any): any {
-  throw new Error("Function not implemented.");
-}

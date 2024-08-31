@@ -19,6 +19,13 @@ export const getStudentSubjectsApi = async () => {
   return response.data;
 };
 
+
+export const getTeacherSubjectsApi = async () => {
+    const response = await axiosInstance.get("/subjects/topics/learners");
+  
+    return response.data;
+  };
+
 export const getSubjectApi = async (id: string) => {
   const response = await axiosInstance.get(`/subjects/${id}`);
   return response.data;

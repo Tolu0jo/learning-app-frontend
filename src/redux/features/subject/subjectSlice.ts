@@ -5,6 +5,7 @@ import {
   fetchStudentSubjects,
   fetchSubjectById,
   updateSubject,
+  fetchTeacherSubjects
 } from "./subjectThunk";
 
 interface Subject {
@@ -20,6 +21,12 @@ interface SubjectWithTopic {
   topics: Topic[];
 }
 
+export interface TeacherSubject{
+    id: string;
+    title: string;
+    userCount: number;
+    topicCount: number;
+  }
 interface Topic {
   id: string;
   title: string;
@@ -32,6 +39,7 @@ interface SubjectState {
   subject: Subject | null;
   selectedSubject: SubjectWithTopic | null;
   studentSubjects: Subject[] | null;
+  teacherSubjects: TeacherSubject[] | null;
   loading: boolean;
   success: string | null;
   error: string | null;
@@ -41,6 +49,7 @@ const initialState: SubjectState = {
   subject: null,
   studentSubjects: null,
   selectedSubject: null,
+  teacherSubjects:null,
   loading: false,
   success: null,
   error: null,
@@ -92,6 +101,22 @@ const subjectSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
+
+    builder.addCase(fetchTeacherSubjects.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      });
+      builder.addCase(
+        fetchTeacherSubjects.fulfilled,
+        (state, action: PayloadAction<TeacherSubject[]>) => {
+          state.loading = false;
+          state.teacherSubjects = action.payload;
+        }
+      );
+      builder.addCase(fetchTeacherSubjects.rejected, (state, action: any) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
 
     builder.addCase(fetchSubjectById.pending, (state) => {
       state.loading = true;
