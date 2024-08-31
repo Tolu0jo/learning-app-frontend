@@ -7,11 +7,11 @@ export interface ICreateCompletion {
 }
 
 export const createCompletionApi = async (createCompletionDto: ICreateCompletion) => {
-  const response = await axiosInstance.post("/api/completions", createCompletionDto);
+  const response = await axiosInstance.post("/completions", createCompletionDto);
   return response.data;
 };
 
 export const getLearnerRankingsApi = async (subjectId: string) => {
-  const response = await axiosInstance.get(`/api/completions/rankings/${subjectId}`);
-  return response.data;
+  const response = await axiosInstance.get(`/completions/rankings/${subjectId}`);
+  return response.data.rankings;
 };

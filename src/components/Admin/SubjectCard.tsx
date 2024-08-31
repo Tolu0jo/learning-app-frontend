@@ -7,12 +7,14 @@ interface SubjectCardProps {
   subjectName: string;
   topicCount: number;
   subjectId: string;
+  userCount: number;
 }
 
 const SubjectCard: React.FC<SubjectCardProps> = ({
   subjectName,
   topicCount,
   subjectId,
+  userCount,
 }) => {
   const router = useRouter();
 
@@ -21,10 +23,7 @@ const SubjectCard: React.FC<SubjectCardProps> = ({
   };
 
   return (
-    <div
-     
-      className="bg-white shadow-md rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
-    >
+    <div className="bg-white shadow-md rounded-lg overflow-hidden cursor-pointer hover:shadow-lg transition-shadow">
       <div className="p-6 flex flex-col gap-3">
         <div className="flex justify-between">
           <h3 className="text-xl font-bold text-gray-800">{subjectName}</h3>
@@ -44,13 +43,15 @@ const SubjectCard: React.FC<SubjectCardProps> = ({
         </p>
 
         <p className="text-gray-600">
-          {topicCount} {topicCount === 1 ? " student erolled" :  " students enrolled"}
+          {userCount}{" "}
+          {userCount === 1 ? " student erolled" : " students enrolled"}
         </p>
         <div className="flex justify-end ">
           {" "}
-          <button 
-           onClick={handleCardClick}
-          className="py-2 px-4 bg-blue-600 text-white w-full rounded-lg hover:bg-blue-700">
+          <button
+            onClick={handleCardClick}
+            className="py-2 px-4 bg-blue-600 text-white w-full rounded-lg hover:bg-blue-700"
+          >
             View
           </button>
         </div>

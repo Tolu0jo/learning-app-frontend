@@ -22,6 +22,7 @@ export const registerApi = async (credentials: IRegister) => {
   return response.data;
 };
 
-export const logoutApi = () => {
+export const logOut = () => {
   localStorage.removeItem("access_token");
+  window.location.href = '/';
 };

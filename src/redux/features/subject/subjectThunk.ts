@@ -7,8 +7,9 @@ import {
   ICreateSubject,
   IUpdateSubject,
   updateSubjectApi,
-  getTeacherSubjectsApi
+  getTeacherSubjectsApi,
 } from "./subjectApi";
+import { logOut } from "../auth/authApi";
 
 export const createSubject = createAsyncThunk(
   "subjects/createSubject",
@@ -17,6 +18,9 @@ export const createSubject = createAsyncThunk(
       const response = await createSubjectApi(credentials);
       return response;
     } catch (error: any) {
+      if (error.response?.data.statusCode === 403) {
+        logOut();
+      }
       return rejectWithValue(error.response?.data || "An error occurred");
     }
   }
@@ -29,22 +33,28 @@ export const fetchStudentSubjects = createAsyncThunk(
       const response = await getStudentSubjectsApi();
       return response;
     } catch (error: any) {
+      if (error.response?.data.statusCode === 403) {
+        logOut();
+      }
       return rejectWithValue(error.response?.data || "An error occurred");
     }
   }
 );
 
 export const fetchTeacherSubjects = createAsyncThunk(
-    "subjects/fetchTeacherSubjects",
-    async (_, { rejectWithValue }) => {
-      try {
-        const response = await getTeacherSubjectsApi();
-        return response;
-      } catch (error: any) {
-        return rejectWithValue(error.response?.data || "An error occurred");
+  "subjects/fetchTeacherSubjects",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await getTeacherSubjectsApi();
+      return response;
+    } catch (error: any) {
+      if (error.response?.data.statusCode === 403) {
+        logOut();
       }
+      return rejectWithValue(error.response?.data || "An error occurred");
     }
-  );
+  }
+);
 
 export const updateSubject = createAsyncThunk(
   "subjects/updateSubject",
@@ -53,6 +63,9 @@ export const updateSubject = createAsyncThunk(
       const response = await updateSubjectApi(data);
       return response;
     } catch (error: any) {
+      if (error.response?.data.statusCode === 403) {
+        logOut();
+      }
       return rejectWithValue(error.response?.data || "An error occurred");
     }
   }
@@ -71,14 +84,13 @@ export const fetchSubjectById = createAsyncThunk(
 );
 
 export const deleteSubject = createAsyncThunk(
-    "subjects/deleteSubject",
-    async (id: string, { rejectWithValue }) => {
-      try {
-        const response = await deleteSubjectApi(id);
-        return response;
-      } catch (error: any) {
-        return rejectWithValue(error.response?.data || "An error occurred");
-      }
+  "subjects/deleteSubject",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const response = await deleteSubjectApi(id);
+      return response;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || "An error occurred");
     }
-  );
-  
+  }
+);

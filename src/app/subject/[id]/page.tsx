@@ -2,6 +2,8 @@
 import Header from '@/components/Header';
 import React, { useEffect, useState } from 'react';
 import { FaTimes, FaCheck,FaBackward } from 'react-icons/fa';
+import { IoMdArrowRoundBack } from 'react-icons/io';
+
 
 interface Topic {
   id: string;
@@ -57,7 +59,7 @@ const SubjectDetailsPage: React.FC<{ subjectId: string }> = ({ subjectId }) => {
             onClick={() => window.history.back()}
             className="text-gray-600 hover:text-gray-900"
           >
-            <FaBackward size={20} />
+            <IoMdArrowRoundBack size={20} />
           </button>
         </header>
         {subject ? (

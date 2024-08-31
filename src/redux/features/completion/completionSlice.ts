@@ -3,9 +3,15 @@ import { createCompletion, getLearnerRankings } from "./completionThunk";
 
 interface CompletionState {
   completion: any | null;
-  rankings: any[];
+  rankings: Ranking[];
   loading: boolean;
   error: string | null;
+}
+
+interface Ranking {
+  name: string;
+  completedTopics:number;
+  totalTopics:number;
 }
 
 const initialState: CompletionState = {

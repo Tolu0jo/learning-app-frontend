@@ -10,12 +10,11 @@ export interface IUpdateSubject {
 export const createSubjectApi = async (credentials: ICreateSubject) => {
   const response = await axiosInstance.post("/subjects", credentials);
 
-  return response.data;
+  return response.data.subject;
 };
 
 export const getStudentSubjectsApi = async () => {
   const response = await axiosInstance.get("/subjects");
-
   return response.data;
 };
 

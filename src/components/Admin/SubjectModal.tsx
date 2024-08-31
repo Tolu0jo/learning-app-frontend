@@ -1,92 +1,75 @@
 "use client";
-import React, { useState } from 'react';
+import {
+  resetSubjectError,
+  resetSubjectSuccess,
+} from "@/redux/features/subject/subjectSlice";
+import { createSubject } from "@/redux/features/subject/subjectThunk";
+import { createTopic } from "@/redux/features/topic/topicThunk";
+import { RootState } from "@/redux/store";
+import { useAppDispatch } from "@/redux/utils";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 interface CreateSubjectModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCreate: (subjectName: string, topics: { title: string; description: string; videoUrl: string }[]) => void;
+  id?: string;
 }
 
-const CreateSubjectModal: React.FC<CreateSubjectModalProps> = ({ isOpen, onClose, onCreate }) => {
-  const [subjectName, setSubjectName] = useState('');
-  const [topics, setTopics] = useState<{ title: string; description: string; videoUrl: string }[]>([]);
+const CreateSubjectModal: React.FC<CreateSubjectModalProps> = ({
+  isOpen,
+  onClose,
+  id,
+}) => {
+  const [subjectName, setSubjectName] = useState("");
+  const router = useRouter();
+  const { loading, error, success, subject } = useSelector(
+    (state: RootState) => state.subject
+  );
 
-  const [isSubjectCreated, setIsSubjectCreated] = useState(false);
-
-  const handleAddTopic = () => {
-    setTopics([...topics, { title: '', description: '', videoUrl: '' }]);
-  };
-
-  const handleTopicChange = (index: number, field: 'title' | 'description' | 'videoUrl', value: string) => {
-    const newTopics = [...topics];
-    newTopics[index] = { ...newTopics[index], [field]: value };
-    setTopics(newTopics);
-  };
+  const dispatch = useAppDispatch();
+ console.log(subject);
+  useEffect(() => {
+    if (success) {
+      toast.success(success);
+      dispatch(resetSubjectSuccess());
+    }
+    if (error) {
+      toast.error(error);
+      dispatch(resetSubjectError());
+    }
+    if (subject && subject.id) {
+      router.push(`/admin/subject/${subject.id}`);
+    }
+  }, [success, error]);
 
   const handleSubmitSubject = () => {
-    // Simulate subject creation
-    onCreate(subjectName, topics);
-    setIsSubjectCreated(true); // Mark subject as created
+    dispatch(createSubject({ title: subjectName }));
   };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Create New Subject</h2>
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg max-h-[600px] overflow-y-auto">
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          Create New Subject
+        </h2>
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700">Subject Name</label>
+          <label className="block text-sm font-medium text-gray-700">
+           Title
+          </label>
           <input
             type="text"
             value={subjectName}
             onChange={(e) => setSubjectName(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg"
-            placeholder="Enter subject name"
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:ring-blue-200 text-gray-900"
+            placeholder="Enter subject title"
           />
         </div>
-   
-        <div className="mb-4">
-          {isSubjectCreated ? (
-            <>
-              <h3 className="text-lg font-semibold mb-2">Add Topics</h3>
-              {topics.map((topic, index) => (
-                <div key={index} className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">Topic Title</label>
-                  <input
-                    type="text"
-                    value={topic.title}
-                    onChange={(e) => handleTopicChange(index, 'title', e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-lg mb-2"
-                    placeholder={`Enter title for topic ${index + 1}`}
-                  />
-                  <label className="block text-sm font-medium text-gray-700">Description</label>
-                  <textarea
-                    value={topic.description}
-                    onChange={(e) => handleTopicChange(index, 'description', e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-lg mb-2"
-                    placeholder={`Enter description for topic ${index + 1}`}
-                  />
-                  <label className="block text-sm font-medium text-gray-700">Video URL</label>
-                  <input
-                    type="text"
-                    value={topic.videoUrl}
-                    onChange={(e) => handleTopicChange(index, 'videoUrl', e.target.value)}
-                    className="w-full p-2 border border-gray-300 rounded-lg"
-                    placeholder={`Enter video URL for topic ${index + 1}`}
-                  />
-                </div>
-              ))}
-              <button
-                type="button"
-                onClick={handleAddTopic}
-                className="mt-2 text-blue-600 hover:underline"
-              >
-                Add another topic
-              </button>
-            </>
-          ) : null}
-        </div>
+
         <div className="flex justify-end">
           <button
             type="button"
@@ -97,10 +80,10 @@ const CreateSubjectModal: React.FC<CreateSubjectModalProps> = ({ isOpen, onClose
           </button>
           <button
             type="button"
-            onClick={isSubjectCreated ? () => onCreate(subjectName, topics) : handleSubmitSubject}
+            onClick={handleSubmitSubject}
             className="py-2 px-4 bg-blue-600 text-white rounded-lg"
           >
-            {isSubjectCreated ? 'Save Topics' : 'Create Subject'}
+            {loading ? "Loading..." : "Create Subject"}
           </button>
         </div>
       </div>

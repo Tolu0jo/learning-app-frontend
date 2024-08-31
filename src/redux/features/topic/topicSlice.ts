@@ -18,16 +18,18 @@ interface TopicState {
   currentTopic: any | null;
   loading: boolean;
   error: string | null;
-  topic:any
+  topic: any;
+  success: string | null;
 }
 
 const initialState: TopicState = {
   topics: [],
   currentTopic: null,
-  topic:null,
+  topic: null,
   loading: false,
   error: null,
   completedTopics: [],
+  success: null,
 };
 
 const topicSlice = createSlice({
@@ -35,7 +37,7 @@ const topicSlice = createSlice({
   initialState,
   reducers: {
     resetTopicState: (state) => {
-      state.currentTopic = null;
+      state.success = null;
       state.error = null;
     },
   },
@@ -49,6 +51,7 @@ const topicSlice = createSlice({
       .addCase(createTopic.fulfilled, (state, action) => {
         state.loading = false;
         state.topic = action.payload;
+        state.success = "Topic created successfully";
       })
       .addCase(createTopic.rejected, (state, action: any) => {
         state.loading = false;
@@ -80,19 +83,14 @@ const topicSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+      // Handle updateTopic
       .addCase(updateTopic.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(updateTopic.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.topics.findIndex(
-          (topic) => topic.id === action.payload.id
-        );
-        if (index !== -1) {
-          state.topics[index] = action.payload;
-        }
+        state.success = "Topic updated successfully";
       })
       .addCase(updateTopic.rejected, (state, action: any) => {
         state.loading = false;
@@ -105,9 +103,7 @@ const topicSlice = createSlice({
       })
       .addCase(deleteTopic.fulfilled, (state, action) => {
         state.loading = false;
-        state.topics = state.topics.filter(
-          (topic) => topic.id !== action.payload.id
-        );
+        state.success = "Topic deleted successfully";
       })
       .addCase(deleteTopic.rejected, (state, action: any) => {
         state.loading = false;

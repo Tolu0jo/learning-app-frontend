@@ -24,7 +24,7 @@ const Register = () => {
   const { loading, error, success } = useSelector(
     (state: RootState) => state.auth
   );
-  console.log(useSelector((state: RootState) => state.auth));
+
   const handleChange = (e: {
     target: { name: string; value: string; type: string; checked: boolean };
   }) => {
