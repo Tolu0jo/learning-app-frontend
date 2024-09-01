@@ -53,12 +53,12 @@ const TeacherDashboard: React.FC = () => {
                 userCount={subject.userCount}
                 subjectId={subject.id}
               />
+
             ))}
           </div>
           <CreateSubjectModal
             isOpen={isModalOpen}
             onClose={() => setIsModalOpen(false)}
-       
           />
         </div>
         }

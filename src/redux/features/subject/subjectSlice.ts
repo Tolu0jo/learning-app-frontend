@@ -151,6 +151,7 @@ const subjectSlice = createSlice({
       (state, action: PayloadAction<Subject>) => {
         state.loading = false;
         state.subject = action.payload;
+        state.success = "Subject updated successfully"
       }
     );
     builder.addCase(updateSubject.rejected, (state, action: any) => {

@@ -33,7 +33,7 @@ export const fetchStudentSubjects = createAsyncThunk(
       const response = await getStudentSubjectsApi();
       return response;
     } catch (error: any) {
-      if (error.response?.data.statusCode === 403) {
+      if (error.response?.data.statusCode === 403 || error.response?.data.statusCode === 401) {
         logOut();
       }
       return rejectWithValue(error.response?.data || "An error occurred");
@@ -48,7 +48,7 @@ export const fetchTeacherSubjects = createAsyncThunk(
       const response = await getTeacherSubjectsApi();
       return response;
     } catch (error: any) {
-      if (error.response?.data.statusCode === 403) {
+      if (error.response?.data.statusCode === 403 || error.response?.data.statusCode === 401) {
         logOut();
       }
       return rejectWithValue(error.response?.data || "An error occurred");
@@ -63,7 +63,7 @@ export const updateSubject = createAsyncThunk(
       const response = await updateSubjectApi(data);
       return response;
     } catch (error: any) {
-      if (error.response?.data.statusCode === 403) {
+      if (error.response?.data.statusCode === 403 || error.response?.data.statusCode === 401) {
         logOut();
       }
       return rejectWithValue(error.response?.data || "An error occurred");
@@ -90,6 +90,9 @@ export const deleteSubject = createAsyncThunk(
       const response = await deleteSubjectApi(id);
       return response;
     } catch (error: any) {
+      if (error.response?.data.statusCode === 403 || error.response?.data.statusCode === 401) {
+        logOut();
+      }
       return rejectWithValue(error.response?.data || "An error occurred");
     }
   }

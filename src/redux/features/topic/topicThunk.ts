@@ -1,5 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { createTopicApi, getCompletedTopicsApi, getTopicApi, updateTopicApi, deleteTopicApi } from "./topicApi";
+import {
+  createTopicApi,
+  getCompletedTopicsApi,
+  getTopicApi,
+  updateTopicApi,
+  deleteTopicApi,
+} from "./topicApi";
 import { ICreateTopic, IUpdateTopic } from "./topicApi";
 import { logOut } from "../auth/authApi";
 
@@ -9,10 +15,13 @@ export const createTopic = createAsyncThunk(
     try {
       return await createTopicApi(topicData);
     } catch (error: any) {
-      if (error.response?.data.statusCode === 403) {
+      if (
+        error.response?.data.statusCode === 403 ||
+        error.response?.data.statusCode === 401
+      ) {
         logOut();
       }
-        return rejectWithValue(error.response?.data || "An error occurred");
+      return rejectWithValue(error.response?.data || "An error occurred");
     }
   }
 );
@@ -23,10 +32,13 @@ export const getCompletedSubjectTopics = createAsyncThunk(
     try {
       return await getCompletedTopicsApi(subjectId);
     } catch (error: any) {
-      if (error.response?.data.statusCode === 403) {
+      if (
+        error.response?.data.statusCode === 403 ||
+        error.response?.data.statusCode === 401
+      ) {
         logOut();
       }
-        return rejectWithValue(error.response?.data || "An error occurred");
+      return rejectWithValue(error.response?.data || "An error occurred");
     }
   }
 );
@@ -37,7 +49,7 @@ export const getTopic = createAsyncThunk(
     try {
       return await getTopicApi(id);
     } catch (error: any) {
-        return rejectWithValue(error.response?.data || "An error occurred");
+      return rejectWithValue(error.response?.data || "An error occurred");
     }
   }
 );
@@ -48,7 +60,12 @@ export const updateTopic = createAsyncThunk(
     try {
       return await updateTopicApi(topicData);
     } catch (error: any) {
-        return rejectWithValue(error.response?.data || "An error occurred");
+      if (
+        error.response?.data.statusCode === 403 ||
+        error.response?.data.statusCode === 401
+      ) {
+        logOut();
+      }
     }
   }
 );
@@ -59,7 +76,13 @@ export const deleteTopic = createAsyncThunk(
     try {
       return await deleteTopicApi(id);
     } catch (error: any) {
-        return rejectWithValue(error.response?.data || "An error occurred");
+      if (
+        error.response?.data.statusCode === 403 ||
+        error.response?.data.statusCode === 401
+      ) {
+        logOut();
+      }
+      return rejectWithValue(error.response?.data || "An error occurred");
     }
   }
 );

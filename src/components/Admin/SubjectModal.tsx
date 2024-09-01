@@ -3,50 +3,63 @@ import {
   resetSubjectError,
   resetSubjectSuccess,
 } from "@/redux/features/subject/subjectSlice";
-import { createSubject } from "@/redux/features/subject/subjectThunk";
-import { createTopic } from "@/redux/features/topic/topicThunk";
+import {
+  createSubject,
+  fetchTeacherSubjects,
+  updateSubject,
+} from "@/redux/features/subject/subjectThunk";
 import { RootState } from "@/redux/store";
 import { useAppDispatch } from "@/redux/utils";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 
 interface CreateSubjectModalProps {
   isOpen: boolean;
   onClose: () => void;
-  id?: string;
+  subjectToEdit?: { title: string; id: string };
 }
 
 const CreateSubjectModal: React.FC<CreateSubjectModalProps> = ({
   isOpen,
   onClose,
-  id,
+  subjectToEdit,
 }) => {
-  const [subjectName, setSubjectName] = useState("");
+  const [subjectName, setSubjectName] = useState(subjectToEdit?.title || "");
   const router = useRouter();
   const { loading, error, success, subject } = useSelector(
     (state: RootState) => state.subject
   );
 
   const dispatch = useAppDispatch();
- console.log(subject);
+  const prevSuccess = useRef<string | null>(null);
+  const prevError = useRef<string | null>(null);
+
   useEffect(() => {
-    if (success) {
+    if (success && prevSuccess.current !== success) {
       toast.success(success);
       dispatch(resetSubjectSuccess());
+      dispatch(fetchTeacherSubjects());
     }
-    if (error) {
+    if (error && prevError.current !== error) {
       toast.error(error);
       dispatch(resetSubjectError());
     }
+    prevSuccess.current = success;
+    prevError.current = error;
+
     if (subject && subject.id) {
       router.push(`/admin/subject/${subject.id}`);
     }
-  }, [success, error]);
+  }, [success, error, dispatch, subject, router]);
 
   const handleSubmitSubject = () => {
-    dispatch(createSubject({ title: subjectName }));
+    if (subjectToEdit) {
+      dispatch(updateSubject({ title: subjectName, id: subjectToEdit.id }));
+    } else {
+      dispatch(createSubject({ title: subjectName }));
+    }
   };
 
   if (!isOpen) return null;
@@ -55,11 +68,11 @@ const CreateSubjectModal: React.FC<CreateSubjectModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg max-h-[600px] overflow-y-auto">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">
-          Create New Subject
+          {subjectToEdit ? "Edit Subject " : "Create New Subject"}
         </h2>
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700">
-           Title
+            Title
           </label>
           <input
             type="text"
@@ -83,7 +96,11 @@ const CreateSubjectModal: React.FC<CreateSubjectModalProps> = ({
             onClick={handleSubmitSubject}
             className="py-2 px-4 bg-blue-600 text-white rounded-lg"
           >
-            {loading ? "Loading..." : "Create Subject"}
+            {loading
+              ? "Loading..."
+              : subjectToEdit
+              ? "Edit Subject"
+              : "Create Subject"}
           </button>
         </div>
       </div>
