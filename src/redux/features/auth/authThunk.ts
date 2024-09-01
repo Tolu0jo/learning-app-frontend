@@ -1,4 +1,4 @@
-import { IRegister, loginApi, logoutApi, registerApi } from "./authApi";
+import { IRegister, loginApi, registerApi } from "./authApi";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const login = createAsyncThunk(
