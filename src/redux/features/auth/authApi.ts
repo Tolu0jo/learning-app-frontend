@@ -9,7 +9,7 @@ export interface IRegister {
 
 export const loginApi = async (credentials: IRegister) => {
   const response = await axiosInstance.post("/auth/login", credentials);
-  console.log(response);
+
   if (response.data.access_token) {
     localStorage.setItem("access_token", response.data.access_token);
   }

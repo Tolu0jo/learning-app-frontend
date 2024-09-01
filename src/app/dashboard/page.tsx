@@ -23,7 +23,7 @@ const TeacherDashboard: React.FC = () => {
 
   const { user } = useSelector((state: RootState) => state.auth);
 
-  console.log(user);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {

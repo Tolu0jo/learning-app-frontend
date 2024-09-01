@@ -41,18 +41,20 @@ const CreateSubjectModal: React.FC<CreateSubjectModalProps> = ({
       toast.success(success);
       dispatch(resetSubjectSuccess());
       dispatch(fetchTeacherSubjects());
+
+      if (subject && subject.id && !subjectToEdit) {
+        router.push(`/admin/subject/${subject.id}`);
+      }
     }
+
     if (error && prevError.current !== error) {
       toast.error(error);
       dispatch(resetSubjectError());
     }
+
     prevSuccess.current = success;
     prevError.current = error;
-
-    if (subject && subject.id) {
-      router.push(`/admin/subject/${subject.id}`);
-    }
-  }, [success, error, dispatch, subject, router]);
+  }, [success, error, dispatch, subject, subjectToEdit, router]);
 
   const handleSubmitSubject = () => {
     if (subjectToEdit) {

@@ -25,60 +25,26 @@ interface Ranking {
     name: string;
   };
   completedTopicsCount: number;
-  totalTopics: number; // Added total topics for ranking
+  totalTopics: number;
 }
 
-const dummySubject = {
-  name: "Mathematics",
-  topics: [
-    {
-      id: "1",
-      title: "Algebra Basics",
-      description: "Introduction to Algebra",
-      videoUrl: "https://www.example.com/video1.mp4",
-    },
-    {
-      id: "2",
-      title: "Geometry Fundamentals",
-      description: "Understanding Shapes and Angles",
-      videoUrl: "https://www.example.com/video2.mp4",
-    },
-  ],
-};
-
-const dummyRankings = [
-  {
-    user: { id: "1", name: "John Doe" },
-    completedTopicsCount: 5,
-    totalTopics: 10,
-  },
-  {
-    user: { id: "2", name: "Jane Smith" },
-    completedTopicsCount: 3,
-    totalTopics: 10,
-  },
-];
 
 const SubjectDetailsPage = () => {
   const { id } = useParams();
   const subjectId = Array.isArray(id) ? id[0] : id;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [subject, setSubject] = useState<typeof dummySubject | null>(null);
-  const [rankings, setRankings] = useState<Ranking[]>([]);
   const dispatch = useAppDispatch();
   const { selectedSubject } = useSelector((state: RootState) => state.subject);
   const { rankings: studentRanking } = useSelector(
     (state: RootState) => state.completion
   );
-  console.log(selectedSubject);
-  console.log(studentRanking);
+
   useEffect(() => {
     if (subjectId) {
       dispatch(fetchSubjectById(subjectId));
       dispatch(getLearnerRankings(subjectId));
-      setSubject(dummySubject); // Replace with API call
-      setRankings(dummyRankings);
-    } // Replace with API call
+    
+    } 
   }, [subjectId, dispatch]);
 
   return (

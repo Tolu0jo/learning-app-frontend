@@ -58,12 +58,12 @@ const TopicModal: React.FC<CreateSubjectModalProps> = ({ isOpen, onClose }) => {
   const [upload, setUpload] = useState<boolean>(false);
 
   useEffect(() => {
-    // Load the Cloudinary script
+   
     const script = document.createElement("script");
     script.src = "https://widget.cloudinary.com/v2.0/global/all.js";
     script.async = true;
     script.onload = () => {
-      // Confirm that window.cloudinary is available
+     
       if (!window.cloudinary) {
         toast.error("Failed to load Cloudinary widget");
       }
@@ -93,15 +93,17 @@ const TopicModal: React.FC<CreateSubjectModalProps> = ({ isOpen, onClose }) => {
               ...prevData,
               videoUrl,
             }));
+            setUpload(true);
           } else if (error) {
             toast.error("Failed to upload video");
           }
         }
       );
+      setUpload(false);
     } else {
       toast.error("Cloudinary widget not available");
     }
-    setUpload(true);
+ 
   };
 
   const handleSubmitSubject = async () => {
